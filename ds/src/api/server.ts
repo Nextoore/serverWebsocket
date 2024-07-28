@@ -4,16 +4,112 @@ import { useSession } from "vinxi/http";
 import { eq } from "drizzle-orm";
 import { db } from "./db";
 import { Users } from "../../drizzle/schema";
+import * as net from 'net';
+import { resolve } from "path";
+import { rejects } from "assert";
+
+const SERVER_IP = '127.0.0.1';
+const SERVER_PORT = 5555;
+
+function boolBuffer(buffer: Buffer): boolean{
+  return buffer.readUInt8(0) === 1;
+}
+
+async function sendData(Type: string, username: string, password: string) {
+  return new Promise<void>((resolve, reject) => {
+    const client = new net.Socket();
+
+    client.connect(SERVER_PORT, SERVER_IP,() => {
+      const message = `${Type} ${username} ${password}`
+      client.write(message);
+    });
+
+    client.on('data', (data: Buffer) =>{
+      const response = boolBuffer(data);
+      console.log(`server replied: ${response}`)
+
+      if(response == false){
+        console.log('Negative response from the server');
+      }else{
+        client.destroy();
+        resolve
+      }
+    });
+
+    client.on('error', (err) => {
+      console.error(`Error: ${err.message}`);
+      reject(err);
+    });
+
+    client.on('close', () => {
+      console.log('Connection closed');
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function validateUsername(username: unknown) {
-  if (typeof username !== "string" || username.length < 3) {
-    return `Usernames must be at least 3 characters long`;
+  if (typeof username !== "string") {
+    return `Username must be a string`;
   }
+
+  const trimUsername = username.trim();
+  if (trimUsername.length < 3 || trimUsername.length > 20){
+    return `Usernames must be between 3 and 20 characters long`;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(trimUsername)){
+    return `Usernames can only contain letters, numbers, and underscores and cannot start with a number`;
+  }
+
 }
 
 function validatePassword(password: unknown) {
-  if (typeof password !== "string" || password.length < 6) {
-    return `Passwords must be at least 6 characters long`;
+  if (typeof password !== "string") {
+    return `Passwords must be a string`;
+  }
+
+  const trimPassword = password.trim();
+  if (trimPassword.length < 6 || trimPassword.length > 20){
+    return `Passwords must be between 6 and 20 characters long`;
+  }
+
+  if (!/[A-Z]/.test(trimPassword)){
+    return`Password must contain at least one uppercase letter`;
+  }
+
+  if (!/[0-9]/.test(trimPassword)){
+    return`Password must contain at least one digit`;
+  }
+
+  if (!/[!@#$%^&*]/.test(trimPassword)) {
+    return `Password must contain at least one special character (!@#$%^&*)`;
   }
 }
 
@@ -29,18 +125,15 @@ async function register(username: string, password: string) {
   return db.insert(Users).values({ username, password }).returning().get();
 }
 
-function getSession() {
-  return useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
-}
 
-export async function loginOrRegister(formData: FormData) {
-  const username = String(formData.get("username"));
+export async function postToServer(formData: FormData){
+  const username = String(formData.get("username"))
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
+
+  sendData(loginType, username, password);
+
   let error = validateUsername(username) || validatePassword(password);
-  if (error) return new Error(error);
 
   try {
     const user = await (loginType !== "login"
@@ -54,6 +147,12 @@ export async function loginOrRegister(formData: FormData) {
     return err as Error;
   }
   throw redirect("/");
+}
+
+function getSession() {
+  return useSession({
+    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+  });
 }
 
 export async function logout() {
@@ -74,11 +173,4 @@ export async function getUser() {
   } catch {
     throw logout();
   }
-}
-
-
-// fetch //
-export async function gg(){
-  let response = await fetch("http://localhost:3100/");
-  console.log(response);
 }
