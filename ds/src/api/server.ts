@@ -1,9 +1,5 @@
 "use server";
 import { redirect } from "@solidjs/router";
-import { useSession } from "vinxi/http";
-import { eq } from "drizzle-orm";
-import { db } from "./db";
-import { Users } from "../../drizzle/schema";
 import * as net from 'net';
 
 const SERVER_IP = '127.0.0.1';
@@ -95,4 +91,5 @@ export async function postToServer(formData: FormData){
     return err as Error;
   }
 }
+
 
