@@ -9,30 +9,33 @@ function boolBuffer(buffer: Buffer): boolean{
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(Type: string, username: string, password: string) {
-  return new Promise<void>((resolve, reject) => {
+async function sendData(Type: string, username: string, password: string): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
 
-    client.connect(SERVER_PORT, SERVER_IP,() => {
-      const message = `${Type} ${username} ${password}`
+    client.connect(SERVER_PORT, SERVER_IP, () => {
+      const message = `${Type} ${username} ${password}`;
       client.write(message);
     });
 
-    client.on('data', (data: Buffer) =>{
+    client.on('data', (data: Buffer) => {
       const response = boolBuffer(data);
-      console.log(`server replied: ${response}`)
+      console.log(`Server replied: ${response}`);
 
-      if(response == false){
+      client.destroy();
+
+      if (!response) {
         console.log('Negative response from the server');
-      }else{
-        client.destroy();
-        resolve
+        resolve(false);  
+      } else {
+        resolve(true);   
       }
     });
 
     client.on('error', (err) => {
       console.error(`Error: ${err.message}`);
-      reject(err);
+      client.destroy();
+      reject(err);  
     });
 
     client.on('close', () => {
@@ -85,8 +88,12 @@ export async function postToServer(formData: FormData){
   let error = validateUsername(username) || validatePassword(password);
 
   try{
-    sendData(loginType, username, password);
+    const result = await sendData(loginType, username, password);
 
+    if (result){
+      throw redirect("/main");
+    }
+    
   }catch(err){
     return err as Error;
   }
