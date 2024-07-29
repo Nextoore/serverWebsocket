@@ -2,7 +2,7 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 
-const SERVER_IP = '127.0.0.1';
+const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
 
 function boolBuffer(buffer: Buffer): boolean{
