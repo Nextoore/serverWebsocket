@@ -41,7 +41,6 @@ export async function loginOrRegister(formData: FormData) {
   const loginType = String(formData.get("loginType"));
   let error = validateUsername(username) || validatePassword(password);
   if (error) return new Error(error);
-
   try {
     const user = await (loginType !== "login"
       ? register(username, password)
@@ -78,7 +77,3 @@ export async function getUser() {
 
 
 // fetch //
-export async function gg(){
-  let response = await fetch("http://localhost:3100/");
-  console.log(response);
-}
