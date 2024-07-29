@@ -86,7 +86,7 @@ export async function postToServer(formData: FormData){
   const loginType = String(formData.get("loginType"));
 
   let error = validateUsername(username) || validatePassword(password);
-
+  if (error) return new Error(error);
   try{
     const result = await sendData(loginType, username, password);
 

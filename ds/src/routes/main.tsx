@@ -1,10 +1,10 @@
-import { createAsync, type RouteDefinition } from "@solidjs/router";
+import styles from './main.module.scss'
 
 export default function Home() {
   
   return (
-    <main>
-      <h1>hiii</h1>
+    <main class={styles.wrapper}>
+      <div class={styles.header}></div>
     </main>
   );
 }
