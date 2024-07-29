@@ -6,7 +6,6 @@ import { db } from "./db";
 import { Users } from "../../drizzle/schema";
 import * as net from 'net';
 
-
 const SERVER_IP = '127.0.0.1';
 const SERVER_PORT = 5555;
 
@@ -79,22 +78,6 @@ function validatePassword(password: unknown) {
   if (!/[0-9]/.test(trimPassword)){
     return`Password must contain at least one digit`;
   }
-
-  if (!/[!@#$%^&*]/.test(trimPassword)) {
-    return `Password must contain at least one special character (!@#$%^&*)`;
-  }
-}
-
-async function login(username: string, password: string) {
-  const user = db.select().from(Users).where(eq(Users.username, username)).get();
-  if (!user || password !== user.password) throw new Error("Invalid login");
-  return user;
-}
-
-async function register(username: string, password: string) {
-  const existingUser = db.select().from(Users).where(eq(Users.username, username)).get();
-  if (existingUser) throw new Error("User already exists");
-  return db.insert(Users).values({ username, password }).returning().get();
 }
 
 
@@ -113,28 +96,3 @@ export async function postToServer(formData: FormData){
   }
 }
 
-function getSession() {
-  return useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
-}
-
-export async function logout() {
-  const session = await getSession();
-  await session.update(d => (d.userId = undefined));
-  throw redirect("/login");
-}
-
-export async function getUser() {
-  const session = await getSession();
-  const userId = session.data.userId;
-  if (userId === undefined) throw redirect("/login");
-
-  try {
-    const user = db.select().from(Users).where(eq(Users.id, userId)).get();
-    if (!user) throw redirect("/login");
-    return { id: user.id, username: user.username };
-  } catch {
-    throw logout();
-  }
-}
