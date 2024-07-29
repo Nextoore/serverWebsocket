@@ -87,11 +87,12 @@ export async function postToServer(formData: FormData){
 
   let error = validateUsername(username) || validatePassword(password);
   if (error) return new Error(error);
+
   try{
     const result = await sendData(loginType, username, password);
 
     if (result){
-      throw redirect("/main");
+      throw redirect("/MainPage/main");
     }
     
   }catch(err){
