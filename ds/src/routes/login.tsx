@@ -4,46 +4,48 @@ import {
 } from "@solidjs/router";
 import { Show } from "solid-js";
 import { loginOrRegister } from "~/api";
-import sai from './radio.module.scss'
-import styles from '../App.module.scss'
-import img from '../img/image.png'
 
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
   
   return (
-    <main class={styles.wrapper}>
-        <img src={img}></img>
-        <form action={loginOrRegister} method="post" class={styles.form}>
-          <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
-          <fieldset>
-            <label class={sai.particlescheckboxcontainer}>
-              <input type="radio" name="loginType" value="login" checked={true} class={sai.particlescheckbox}/> 
-              <span><h1>Login</h1></span>
-            </label>
-            <label class={sai.particlescheckboxcontainer}>
-              <input type="radio" name="loginType" value="register" class={sai.particlescheckbox}/>
-              <span><h1>Register</h1></span>
-            </label>
-          </fieldset>
-          <div class={styles.container}>
-            <div class={styles.inputik}>
-              <input name="username" placeholder="Login" autocomplete="username" />
-            </div>
-            <div class={styles.inputik}>
-              <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
-            </div>
-          </div>
-        
-          <button type="submit" class={styles.btn}>Login</button> 
-          <Show when={loggingIn.result} >
-            <p class={styles.alert} role="alert" id="error-message">
-              {loggingIn.result!.message}
-            </p>
-          </Show>
-        </form>
-      
+    <main>
+      <h1>Login</h1>
+      <form action={loginOrRegister} method="post">
+        <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
+        <fieldset>
+          <legend>Login or Register?</legend>
+          <label>
+            <input type="radio" name="loginType" value="login" checked={true} /> Login
+          </label>
+          <label>
+            <input type="radio" name="loginType" value="register" /> Register
+          </label>
+        </fieldset>
+        <div>
+          <label for="username-input">Username</label>
+          <input name="username" placeholder="kody" autocomplete="username" />
+        </div>
+        <div>
+          <label for="password-input">Password</label>
+          <input name="password" type="password" placeholder="twixrox" autocomplete="current-password" />
+        </div>
+        <div>
+          <label for="passwors">Password</label>
+          <input name="passworsd" type="password" placeholder="" autocomplete="current-password"/>
+        </div>
+        <div>
+          <label for="passwors">Password</label>
+          <input name="passworsd" type="password" placeholder="" autocomplete="current-password"/>
+        </div>
+        <button type="submit" >Login</button> 
+        <Show when={loggingIn.result}>
+          <p style={{color: "red"}} role="alert" id="error-message">
+            {loggingIn.result!.message}
+          </p>
+        </Show>
+      </form>
     </main>
   );
 }
