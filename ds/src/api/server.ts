@@ -47,33 +47,6 @@ async function sendData(Type: string, username: string, password: string) {
   });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function validateUsername(username: unknown) {
   if (typeof username !== "string") {
     return `Username must be a string`;
@@ -131,22 +104,14 @@ export async function postToServer(formData: FormData){
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
 
-  sendData(loginType, username, password);
-
   let error = validateUsername(username) || validatePassword(password);
 
-  try {
-    const user = await (loginType !== "login"
-      ? register(username, password)
-      : login(username, password));
-    const session = await getSession();
-    await session.update(d => {
-      d.userId = user.id;
-    });
-  } catch (err) {
+  try{
+    sendData(loginType, username, password);
+
+  }catch(err){
     return err as Error;
   }
-  throw redirect("/");
 }
 
 function getSession() {
