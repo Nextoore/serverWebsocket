@@ -5,8 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "./db";
 import { Users } from "../../drizzle/schema";
 import * as net from 'net';
-import { resolve } from "path";
-import { rejects } from "assert";
+
 
 const SERVER_IP = '127.0.0.1';
 const SERVER_PORT = 5555;
@@ -46,33 +45,6 @@ async function sendData(Type: string, username: string, password: string) {
     });
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string") {
@@ -131,22 +103,14 @@ export async function postToServer(formData: FormData){
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
 
-  sendData(loginType, username, password);
-
   let error = validateUsername(username) || validatePassword(password);
 
-  try {
-    const user = await (loginType !== "login"
-      ? register(username, password)
-      : login(username, password));
-    const session = await getSession();
-    await session.update(d => {
-      d.userId = user.id;
-    });
-  } catch (err) {
+  try{
+    sendData(loginType, username, password);
+
+  }catch(err){
     return err as Error;
   }
-  throw redirect("/");
 }
 
 function getSession() {

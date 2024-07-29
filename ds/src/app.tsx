@@ -9,10 +9,6 @@ export default function App() {
     <Router
       root={props => (
         <>
-        <header class='sss'>
-          <a href="/">Index</a>
-          <a href="/about">About</a>
-        </header>
           <Suspense>{props.children}</Suspense>
         </>
       )}
