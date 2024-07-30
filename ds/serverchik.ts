@@ -24,12 +24,12 @@ interface Message {
     event: string; 
     user?: string; 
     id?: number; 
-  } 
-  
-  function broadcast(message: Message) { 
+} 
+ 
+function broadcast(message: Message) { 
     wss.clients.forEach(client => { 
         if (client.readyState === WebSocket.OPEN) { 
             client.send(JSON.stringify(message)); 
         } 
     }); 
-  }
+}
