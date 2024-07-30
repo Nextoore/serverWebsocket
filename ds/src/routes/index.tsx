@@ -20,7 +20,7 @@ export default function Login(props: RouteSectionProps) {
   function safety(){
     setCount((prev) => prev = 0) 
   }
-  setTimeout(safety, 60000);
+  setTimeout(safety, 10000);
   return (
     <main class={styles.wrapper}>
         <img src={img}></img>
@@ -45,7 +45,7 @@ export default function Login(props: RouteSectionProps) {
             </div>
           </div>
         
-          <button type="submit" class={styles.btn} onClick={[handler]} disabled={count() > 3}>Login</button> 
+          <button type="submit" class={styles.btn} onClick={handler} disabled={count() > 3}>Login</button> 
           <Show when={loggingIn.result} >
             <p class={styles.alert} role="alert" id="error-message">
               {loggingIn.result!.message}
