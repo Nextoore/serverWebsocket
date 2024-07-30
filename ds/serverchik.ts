@@ -20,8 +20,16 @@ wss.on('connection', function connection(ws:any) {
     })
 })
 
-function broadcast(message){
-    wss.client.forEach(client => {
-        client.send(message)
-    })
-}
+interface Message { 
+    event: string; 
+    user?: string; 
+    id?: number; 
+  } 
+  
+  function broadcast(message: Message) { 
+    wss.clients.forEach(client => { 
+        if (client.readyState === WebSocket.OPEN) { 
+            client.send(JSON.stringify(message)); 
+        } 
+    }); 
+  }
