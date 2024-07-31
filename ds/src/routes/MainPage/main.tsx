@@ -6,11 +6,17 @@ const SERVER_PORT = 9999;
 const SERVER_URL = `ws://${SERVER_IP}:${SERVER_PORT}`
 
 export default function Home() { 
-  const [message, setMessage] = createSignal<string[]>([]); 
+  const [message, setMessage] = createSignal<{ chat: string; messages: any[] }[]>([]); 
   const [ready, setReady] = createSignal(false); 
   const [user, setUser] = createSignal(''); 
+  const [chatRoom, setChatRoom] = createSignal('');
 
   function connection() { 
+    if (chatRoom() === '') {
+      console.log('Chat room is required.');
+      return;
+    }
+    
     socket = new WebSocket(SERVER_URL); 
 
     socket.onopen = () => { 
@@ -19,6 +25,7 @@ export default function Home() {
       const msg = { 
         event: 'connection', 
         user: user(), 
+        chat: chatRoom(), 
         id: Date.now() 
       }; 
       socket.send(JSON.stringify(msg)); 
@@ -26,7 +33,15 @@ export default function Home() {
 
     socket.onmessage = (event) => { 
       const receivedMessage = JSON.parse(event.data); 
-      setMessage((prevArray) => [...prevArray, receivedMessage]);
+      setMessage((prevArray) => {
+        const existingChat = prevArray.find(chat => chat.chat === receivedMessage.chat);
+        if (existingChat) {
+          existingChat.messages.push(receivedMessage);
+          return [...prevArray.filter(chat => chat.chat !== receivedMessage.chat), existingChat];
+        } else {
+          return [...prevArray, { chat: receivedMessage.chat, messages: [receivedMessage] }];
+        }
+      });
     }; 
 
     socket.onerror = (error) => { 
@@ -40,17 +55,18 @@ export default function Home() {
   } 
 
   function sendMessage() { 
-    if (socket && socket.readyState === WebSocket.OPEN) { 
+    if (socket && socket.readyState === WebSocket.OPEN && chatRoom() !== '') { 
       const msg = { 
         user: user(), 
         message: user(), 
         id: Date.now(), 
-        event: 'message' 
+        event: 'message',
+        chat: chatRoom() 
       }; 
       socket.send(JSON.stringify(msg)); 
       setUser(''); 
     } else { 
-      console.log('WebSocket is not open.'); 
+      console.log('WebSocket is not open or chat room is not specified.'); 
     } 
   } 
 
@@ -72,21 +88,32 @@ export default function Home() {
           <div>
             <input 
               type="text" 
-              placeholder='YO, chat' 
+              placeholder='Yo, chat' 
+              value={chatRoom()} 
+              onInput={(e) => setChatRoom(e.target.value)} 
+            /> 
+            <input 
+              type="text" 
+              placeholder='Enter name' 
               value={user()} 
               onInput={(e) => setUser(e.target.value)} 
             /> 
-            <button onClick={connection}>Join</button> 
+            <button onClick={connection}>Join Chat Room</button> 
           </div>
         ) : ( 
           <div>
             <div>
-              {message().map((mess) => (
-                <div key={mess.id}>
-                  {mess.event === 'connection'
-                    ? <div> {mess.user} joined </div>
-                    : <div> {mess.message} </div>
-                  }
+              {message().map((chat) => (
+                <div key={chat.chat}>
+                  <h2>Chat Room: {chat.chat}</h2>
+                  {chat.messages.map((mess) => (
+                    <div key={mess.id}>
+                      {mess.event === 'connection'
+                        ? <div> {mess.user} joined </div>
+                        : <div> {mess.message} </div>
+                      }
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
@@ -105,6 +132,7 @@ export default function Home() {
     </main> 
   ); 
 }
+
 
 
 
