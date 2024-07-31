@@ -2,8 +2,8 @@ import { client } from "process";
 
 const ws = require('ws');
 const wss = new ws.Server({
-    port: 5000, 
-}, () => console.log('works on port 5000'))
+    port: 9999, 
+}, () => console.log('works on port 9999'))
 
 wss.on('connection', function connection(ws:any) {
     ws.on('message', function(message:any){

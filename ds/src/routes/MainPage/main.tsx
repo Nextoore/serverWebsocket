@@ -1,63 +1,65 @@
 import { createSignal, createEffect } from "solid-js"; 
- 
-let soscket: WebSocket | undefined; 
- 
+
+let socket: WebSocket | undefined; 
+const SERVER_IP = '185.102.139.56';
+const SERVER_PORT = 9999;
+const SERVER_URL = `ws://${SERVER_IP}:${SERVER_PORT}`
+
 export default function Home() { 
   const [message, setMessage] = createSignal<string[]>([]); 
   const [ready, setReady] = createSignal(false); 
   const [user, setUser] = createSignal(''); 
-  const [name, setName] = createSignal(''); 
- 
+
   function connection() { 
-    soscket = new WebSocket('ws://localhost:5000'); 
- 
-    soscket.onopen = () => { 
+    socket = new WebSocket(SERVER_URL); 
+
+    socket.onopen = () => { 
       console.log('Connected'); 
       setReady(true); 
-      const message = { 
+      const msg = { 
         event: 'connection', 
         user: user(), 
         id: Date.now() 
       }; 
-      soscket.send(JSON.stringify(message)); 
+      socket.send(JSON.stringify(msg)); 
     }; 
- 
-    soscket.onmessage = (event) => { 
+
+    socket.onmessage = (event) => { 
       const receivedMessage = JSON.parse(event.data); 
       setMessage((prevArray) => [...prevArray, receivedMessage]);
     }; 
- 
-    soscket.onerror = (error) => { 
+
+    socket.onerror = (error) => { 
       console.error('WebSocket error:', error); 
     }; 
- 
-    soscket.onclose = () => { 
+
+    socket.onclose = () => { 
       console.log('WebSocket closed'); 
       setReady(false); 
     }; 
   } 
- 
+
   function sendMessage() { 
-    if (soscket && soscket.readyState === WebSocket.OPEN) { 
-      const message = { 
+    if (socket && socket.readyState === WebSocket.OPEN) { 
+      const msg = { 
         user: user(), 
         message: user(), 
         id: Date.now(), 
         event: 'message' 
       }; 
-      soscket.send(JSON.stringify(message)); 
+      socket.send(JSON.stringify(msg)); 
       setUser(''); 
     } else { 
       console.log('WebSocket is not open.'); 
     } 
   } 
- 
+
   createEffect(() => { 
     if (ready()) { 
       console.log('Ready state changed to true'); 
     } 
   }); 
- 
+
   function onKeyUps(ev: KeyboardEvent) { 
     if (ev.key === 'Enter') { 
       sendMessage(); 
@@ -65,9 +67,9 @@ export default function Home() {
   } 
   
   return ( 
-    <main> 
+    <main>
         {!ready() ? ( 
-          <> 
+          <div>
             <input 
               type="text" 
               placeholder='YO, chat' 
@@ -75,32 +77,34 @@ export default function Home() {
               onInput={(e) => setUser(e.target.value)} 
             /> 
             <button onClick={connection}>Join</button> 
-          </> 
-        ) : ( 
-          <> 
-            <input 
-              type="text" 
-              placeholder='Enter message' 
-              value={user()} 
-              onInput={(e) => setUser(e.target.value)} 
-              onKeyUp={onKeyUps} 
-            /> 
-            <button type="button" onClick={sendMessage}> Send</button> 
-            <div>
-            {message().map((mess) => (
-              <div key={mess}>
-                {mess.event === 'connection'
-                  ? <div> {mess.user} joined </div>
-                  : <div> {mess.message} </div>
-                }
-              </div>
-              
-            ))}
           </div>
-          </> 
+        ) : ( 
+          <div>
+            <div>
+              {message().map((mess) => (
+                <div key={mess.id}>
+                  {mess.event === 'connection'
+                    ? <div> {mess.user} joined </div>
+                    : <div> {mess.message} </div>
+                  }
+                </div>
+              ))}
+            </div>
+            <div>
+              <input 
+                type="text" 
+                placeholder='Enter message' 
+                value={user()} 
+                onInput={(e) => setUser(e.target.value)} 
+                onKeyUp={onKeyUps} 
+              /> 
+              <button type="button" onClick={sendMessage}> Send</button> 
+            </div>
+          </div>
         )} 
     </main> 
   ); 
 }
+
 
 
