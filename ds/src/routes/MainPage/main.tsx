@@ -3,7 +3,7 @@ import { createSignal, createEffect } from "solid-js";
 let soscket: WebSocket | undefined; 
  
 export default function Home() { 
-  const [message, setMessage] = createSignal([]); 
+  const [message, setMessage] = createSignal<string[]>([]); 
   const [ready, setReady] = createSignal(false); 
   const [user, setUser] = createSignal(''); 
   const [name, setName] = createSignal(''); 
@@ -15,7 +15,7 @@ export default function Home() {
       console.log('Connected'); 
       setReady(true); 
       const message = { 
-        event: 'message', 
+        event: 'connection', 
         user: user(), 
         id: Date.now() 
       }; 
@@ -24,7 +24,7 @@ export default function Home() {
  
     soscket.onmessage = (event) => { 
       const receivedMessage = JSON.parse(event.data); 
-      console.log('Message received:', receivedMessage); 
+      setMessage((prevArray) => [...prevArray, receivedMessage]);
     }; 
  
     soscket.onerror = (error) => { 
@@ -63,7 +63,7 @@ export default function Home() {
       sendMessage(); 
     } 
   } 
- 
+  
   return ( 
     <main> 
         {!ready() ? ( 
@@ -86,6 +86,17 @@ export default function Home() {
               onKeyUp={onKeyUps} 
             /> 
             <button type="button" onClick={sendMessage}> Send</button> 
+            <div>
+            {message().map((mess) => (
+              <div key={mess}>
+                {mess.event === 'connection'
+                  ? <div> {mess.user} joined </div>
+                  : <div> {mess.message} </div>
+                }
+              </div>
+              
+            ))}
+          </div>
           </> 
         )} 
     </main> 
