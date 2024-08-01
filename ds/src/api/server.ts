@@ -2,20 +2,25 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 
-const SERVER_IP = '185.102.139.56';
+const SERVER_IP = 'localhost';
 const SERVER_PORT = 5555;
 
 function boolBuffer(buffer: Buffer): boolean{
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(Type: string, username: string, password: string): Promise<boolean> {
+async function sendData(Type: string, username: string, password: string, mail: string = '0', date: string = '0', nickname: string = '0'): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
-      const message = `${Type} ${username} ${password}`;
-      client.write(message);
+      if (Type = 'register'){
+        const message = `${Type} ${username} ${password} ${nickname} ${date} ${mail}`;
+        client.write(message);
+      }else{
+        const message = `${Type} ${username} ${password}`;
+        client.write(message);
+      }
     });
 
     client.on('data', (data: Buffer) => {
@@ -89,10 +94,28 @@ export async function postToServer(formData: FormData){
   if (error) return new Error(error);
 
   try{
-    const result = await sendData(loginType, username, password);
+    if (loginType == 'register'){
+      const nickname = String(formData.get("nickname"))
+      const mail = String(formData.get("mail"));
+      const day = String(formData.get("day"));
+      const month = String(formData.get("month"));
+      const year = String(formData.get("year"));
+      const date = `${day}.${month}.${year}`;
+      console.log(`${nickname}, ${mail}, ${date}`);
 
-    if (result){
-      throw redirect("/MainPage/main");
+      const result = await sendData(loginType, username, password, mail, date, nickname);
+
+      if (result){
+        throw redirect("/MainPage/main");
+      }
+
+    }else{
+
+      const result = await sendData(loginType, username, password);
+
+      if (result){
+        throw redirect("/MainPage/main");
+      }
     }
     
   }catch(err){
