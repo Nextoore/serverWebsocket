@@ -99,6 +99,7 @@ export default function Home() {
     <main>
         {!ready() ? ( 
           <div>
+            <p>{username()}</p>
             <input 
               type="text" 
               placeholder='Chatname' 
