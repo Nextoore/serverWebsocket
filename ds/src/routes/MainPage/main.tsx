@@ -1,5 +1,5 @@
 import { createSignal, createEffect } from "solid-js"; 
-
+import s from './main.module.scss'
 let socket: WebSocket | undefined; 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 9999;
@@ -10,7 +10,7 @@ export default function Home() {
   const [ready, setReady] = createSignal(false); 
   const [user, setUser] = createSignal(''); 
   const [chatRoom, setChatRoom] = createSignal('');
-
+  console.log(2)
   function connection() { 
     if (chatRoom() === '') {
       console.log('Chat room is required.');
@@ -88,7 +88,7 @@ export default function Home() {
           <div>
             <input 
               type="text" 
-              placeholder='Yo, chat' 
+              placeholder='Chatname' 
               value={chatRoom()} 
               onInput={(e) => setChatRoom(e.target.value)} 
             /> 
@@ -98,12 +98,24 @@ export default function Home() {
               value={user()} 
               onInput={(e) => setUser(e.target.value)} 
             /> 
-            <button onClick={connection}>Join Chat Room</button> 
+            <button onClick={connection} class={s.btn}>Join Chat Room</button> 
           </div>
         ) : ( 
           <div>
             <div>
-              {message().map((chat) => (
+              
+            </div>
+            <div>
+              <input 
+                type="text" 
+                placeholder='Enter message' 
+                value={user()} 
+                onInput={(e) => setUser(e.target.value)} 
+                onKeyUp={onKeyUps} 
+              /> 
+              <button type="button" onClick={sendMessage} class={s.btn}> Send</button> 
+            </div>
+            {message().map((chat) => (
                 <div key={chat.chat}>
                   <h2>Chat Room: {chat.chat}</h2>
                   {chat.messages.map((mess) => (
@@ -116,17 +128,6 @@ export default function Home() {
                   ))}
                 </div>
               ))}
-            </div>
-            <div>
-              <input 
-                type="text" 
-                placeholder='Enter message' 
-                value={user()} 
-                onInput={(e) => setUser(e.target.value)} 
-                onKeyUp={onKeyUps} 
-              /> 
-              <button type="button" onClick={sendMessage}> Send</button> 
-            </div>
           </div>
         )} 
     </main> 

@@ -1,24 +1,4 @@
-.wrapper{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .container{
-        height: 600px;
-        width: 1200px;
-        border: 2px solid red;
-        display: flex;
-        align-items: end;
-        justify-content: center;
-        input{
-            border: 2px solid grey;
-            border-radius: 20px;
-            width: 400px;
-            height: 50px;
-            text-align: center;
-            color: black;
-        }
+
         .btn{
             border: 2px solid grey;
             height: 50px;
@@ -26,5 +6,3 @@
             border-radius: 20px;
             user-select: all;
         }
-    }
-}
