@@ -1,5 +1,6 @@
 import { createSignal, createEffect } from "solid-js"; 
 import s from './main.module.scss'
+import { useLocation } from "@solidjs/router";
 let socket: WebSocket | undefined; 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 9999;
@@ -10,6 +11,18 @@ export default function Home() {
   const [ready, setReady] = createSignal(false); 
   const [user, setUser] = createSignal(''); 
   const [chatRoom, setChatRoom] = createSignal('');
+  const [username, setUsername] = createSignal<string | undefined>(undefined);
+
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const usernameParam = queryParams.get("username");
+
+  if (usernameParam) {
+    setUsername(usernameParam);
+  }
+
+
   console.log(2)
   function connection() { 
     if (chatRoom() === '') {

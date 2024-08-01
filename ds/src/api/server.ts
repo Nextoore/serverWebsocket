@@ -14,7 +14,7 @@ async function sendData(Type: string, username: string, password: string, mail: 
     const client = new net.Socket();
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
-      if (Type = 'register'){
+      if (Type == 'register'){
         const message = `${Type} ${username} ${password} ${nickname} ${date} ${mail}`;
         client.write(message);
       }else{
@@ -106,7 +106,7 @@ export async function postToServer(formData: FormData){
       const result = await sendData(loginType, username, password, mail, date, nickname);
 
       if (result){
-        throw redirect("/MainPage/main");
+        throw redirect(`/MainPage/main?username=${encodeURIComponent(username)}`);
       }
 
     }else{
@@ -114,7 +114,7 @@ export async function postToServer(formData: FormData){
       const result = await sendData(loginType, username, password);
 
       if (result){
-        throw redirect("/MainPage/main");
+        throw redirect(`/MainPage/main?username=${encodeURIComponent(username)}`);
       }
     }
     
