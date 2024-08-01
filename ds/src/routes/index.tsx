@@ -14,9 +14,9 @@ export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(postToServer);
   const [count, setCount] = createSignal(0);
   const [login, setLogin] = createSignal(true);
+  
 
-
-  // funcs for work
+  // функции 
   const handler = () => {
     setCount((prev) => prev + 1)
     console.log(count())   
@@ -32,18 +32,21 @@ export default function Login(props: RouteSectionProps) {
   }
   setTimeout(safety, 10000);
 
-  // funcs for style
+  // функции для стилизации 
 
-
+  const [clas, setClas] = createSignal(false);
+  const addClass = () => {
+    setClas(true)
+  }
 
   return (
     <main class={styles.wrapper}>
         {login() ? (
-          <div class={styles.cont}>
+          <div class={styles.cont} classList={{[styles.next]: true}}>
             <form action={postToServer} method="post" class={styles.form}>
             <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
 
-                <input type="radio" name="loginType" value="login" checked={true} class={sai.particlescheckbox}/> 
+              <input type="radio" name="loginType" checked={true} value="login" class={sai.particlescheckbox}/>
                 <div class={sai.div}><h1>Login</h1></div>
 
               <div class={styles.inputik}>
@@ -65,7 +68,7 @@ export default function Login(props: RouteSectionProps) {
               </p>
             </Show>
           </form>
-          <button onClick={() => { register();}} class={styles.btn2}>don't have an account?</button>
+          <button onClick={() => { register(); addClass();}} class={styles.btn2}>don't have an account?</button>
         </div>
         ) : (
         <div class={styles.cont}>
@@ -85,7 +88,7 @@ export default function Login(props: RouteSectionProps) {
               <input name="mail" type="mail" placeholder="Mail" autocomplete="current-password" />
             </div>
             <div class={styles.inputik}>
-              <input name="nickname" placeholder="Login" autocomplete="username" />
+              <input name="nickname" placeholder="Nickname" autocomplete="username" />
             </div>
             <div class={styles.inputik}>
             <select name="day" id="">
