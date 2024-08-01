@@ -85,6 +85,9 @@ export default function Login(props: RouteSectionProps) {
               <input name="mail" type="mail" placeholder="Mail" autocomplete="current-password" />
             </div>
             <div class={styles.inputik}>
+              <input name="nickname" placeholder="Login" autocomplete="username" />
+            </div>
+            <div class={styles.inputik}>
             <select name="day" id="">
                 <option>1</option>
                 <option>2</option>
