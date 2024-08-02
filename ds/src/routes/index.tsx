@@ -84,16 +84,13 @@ export default function Login(props: RouteSectionProps) {
               <input name="username" placeholder="Login" autocomplete="username" />
             </div>
             <div class={styles.inputik}>
-              <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
-            </div>
-            <div class={styles.inputik}>
               <input name="mail" type="mail" placeholder="Mail" autocomplete="current-password" />
             </div>
             <div class={styles.inputik}>
-              <input name="nickname" placeholder="Nickname" autocomplete="username" />
+              <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
             </div>
                     
-          <button type="submit" class={styles.btn} onClick={handler} disabled={count() > 3}>Login</button> 
+          <button type="submit" class={styles.btn} onClick={handler} disabled={count() > 3}>Registration</button> 
           <Show when={loggingIn.result} >
             <p class={styles.alert} role="alert" id="error-message">
               {loggingIn.result!.message}
@@ -105,7 +102,7 @@ export default function Login(props: RouteSectionProps) {
             </p>
           </Show>
         </form>
-        <button onClick={() => { logins(); removeClass();}} class={styles.btn2}>don't have an account?</button>
+        <button onClick={() => { logins(); removeClass();}} class={styles.btn2}>Already have an account?</button>
       </div>
     </div>
     </main>

@@ -18,6 +18,7 @@
         border: 2px solid red;
         overflow: hidden;
         height: 400px;
+        width: 350px;
         transition: all .5s ease-in-out;
         .loogin{
             display: flex;
@@ -25,6 +26,7 @@
             align-items: center;
             flex-direction: column;
             transition: all .5s ease-in-out;
+            transform: translateX(170px);
             .my{
                 background: red;
             }
@@ -99,7 +101,7 @@
             }
         }
         .next{
-            display: none;
+            transform: translateX(-500px);
         }
         .register{
             display: flex;
@@ -107,6 +109,7 @@
             align-items: center;
             flex-direction: column;
             transition: all .5s ease-in-out;
+            transform: translateX(-170px);
             .my{
                 background: red;
             }
@@ -181,12 +184,12 @@
             }
         }
         .nextoora{
-            display: none;
+            transform: translateX(500px);
             
         }
     }
     .nexto{
-        height: 600px;
+        height: 500px;
         transition: all .5s ease-in-out;
     }
 }
