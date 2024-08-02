@@ -6,7 +6,7 @@ import { Show } from "solid-js";
 import { postToServer } from "~/api";
 import sai from './radio.module.scss'
 import styles from '../App.module.scss'
-import img from '../img/image.png'
+import img from './next.module.scss'
 import { createSignal } from "solid-js";
 
 
@@ -24,12 +24,7 @@ export default function Login(props: RouteSectionProps) {
   function safety(){
     setCount((prev) => prev = 0) 
   }
-  function register(){
-    setLogin(false)
-  }
-  function logins(){
-    setLogin(true)
-  }
+  
   setTimeout(safety, 10000);
 
   // функции для стилизации 
@@ -38,11 +33,19 @@ export default function Login(props: RouteSectionProps) {
   const addClass = () => {
     setClas(true)
   }
-
+  const removeClass = () => {
+    setClas(false)
+  }
+  function register(){
+    setLogin(false)
+  }
+  function logins(){
+    setLogin(true)
+  }
   return (
     <main class={styles.wrapper}>
-        {login() ? (
-          <div class={styles.cont} classList={{[styles.next]: true}}>
+      <div class={styles.home} classList={{[styles.nexto]: clas()}}>
+        <div class={styles.loogin} classList={{[styles.next]: clas()}}>
             <form action={postToServer} method="post" class={styles.form}>
             <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
 
@@ -70,8 +73,7 @@ export default function Login(props: RouteSectionProps) {
           </form>
           <button onClick={() => { register(); addClass();}} class={styles.btn2}>don't have an account?</button>
         </div>
-        ) : (
-        <div class={styles.cont}>
+        <div class={styles.register} classList={{[styles.nextoora]: login()}}>
         <form action={postToServer} method="post" class={styles.form}>
           <input type="hidden" name="redirectTo" value={props.params.redirectTo ?? "/"} />
           
@@ -90,58 +92,7 @@ export default function Login(props: RouteSectionProps) {
             <div class={styles.inputik}>
               <input name="nickname" placeholder="Nickname" autocomplete="username" />
             </div>
-            <div class={styles.inputik}>
-            <select name="day" id="">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4 </option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12 </option>
-                <option>13</option>
-                <option>14 </option>
-                <option>15</option>
-                <option>16</option>
-                <option>17</option>
-                <option>18</option>
-                <option>19</option>
-                <option>20</option>
-                <option>21</option>
-                <option>22 </option>
-                <option>23</option>
-                <option>24</option>
-                <option>25</option>
-                <option>26</option>
-                <option>27</option>
-                <option>28</option>
-                <option>29</option>
-                <option>30</option>
-                <option>31</option>
-              </select>
-              <select name="month" id="">
-                <option>Janyary</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April </option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
-              </select>
-              <input name="year" type="mail" placeholder="Year" autocomplete="current-password" />
-            </div>
-            
-          
+                    
           <button type="submit" class={styles.btn} onClick={handler} disabled={count() > 3}>Login</button> 
           <Show when={loggingIn.result} >
             <p class={styles.alert} role="alert" id="error-message">
@@ -154,11 +105,9 @@ export default function Login(props: RouteSectionProps) {
             </p>
           </Show>
         </form>
-        <button onClick={logins} class={styles.btn2}>don't have an account?</button>
+        <button onClick={() => { logins(); removeClass();}} class={styles.btn2}>don't have an account?</button>
       </div>
-      
-      )}
-      
+    </div>
     </main>
   );
 }
