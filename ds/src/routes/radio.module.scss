@@ -1,35 +1,14 @@
 .particlescheckbox {
   transform: scale(0);
   opacity: 0;
+  display: none;
 }
-
-.div{
-
   h1{
-    margin: 5px;
-    background: linear-gradient(
-        to right,
-        #fa0053 20%,
-        #4c04aa 30%,
-        #4c04aa 70%,
-        #fa0053 80%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    margin-top: -20px;
+    color: #000;
+    font-size: 2em;
+    font-weight: bold;
+}
 
-    background-size: 500% auto;
-    animation: textShine 5s ease-in-out infinite alternate;
-    @keyframes textShine {
-        0% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-      
-    
-}
-}
 
