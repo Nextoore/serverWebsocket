@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
+import { hashString } from "./crypt";
 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
@@ -12,6 +13,7 @@ function boolBuffer(buffer: Buffer): boolean{
 async function sendData(Type: string, username: string, password: string, mail: string = '0', date: string = '0', nickname: string = '0'): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
+    password = hashString(password);
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
       if (Type == 'register'){
