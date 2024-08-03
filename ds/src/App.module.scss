@@ -22,7 +22,7 @@
         backdrop-filter: blur(20px);
         height: 480px;
         width: 400px;
-        border: 2px solid rgba(34, 29, 29, 0.5);
+        border: 2px solid rgb(105, 49, 77);
         transition: all .5s ease-in-out;
         .loogin{
             display: flex;
@@ -37,8 +37,9 @@
                 margin-bottom: -40px;
                 margin-top: 20px;
                 transition: all .5s ease-in-out;
+                color:rgb(105, 49, 77);
                 &:hover{
-                    color: purple;
+                    color: rgb(61, 26, 43);
                     transition: all .5s ease-in-out;
                 }
             }
@@ -81,10 +82,10 @@
                     border-radius: 20px;
                     margin: 10px;
                     transition: all .5s ease-in-out;
-                    background: #052136;
+                    background: rgb(188,101,144);
                     color: #bdbaba;
                     &:hover{
-                        background: #1f3a4e;
+                        background: rgb(209, 117, 148);
                         transition: all .5s ease-in-out;
                         color: #fff;
                     }
@@ -93,23 +94,11 @@
                         position: relative;
                         width: 100%;
                         height: 50px;
-                        border-bottom: 2px solid #162938;
+                        border-bottom: 2px solid rgb(188,101,144);
                         margin: 10px 0;
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-
-                        label{
-                            position: absolute;
-                            top: 50%;
-                            left: 5px;
-                            transform: translateY(-50%);
-                            font-size: 1em;
-                            color: #162938;
-                            font-weight: 500;
-                            pointer-events: none;
-                            transition: all .4s ease-in-out;
-                        }
                         input{
                             width: 100%;
                             height: 100%;
@@ -118,9 +107,9 @@
                             outline: none;
                             font-size: 1em;
                             font-weight: 500;
-                            color: #052136;
+                            color: rgb(41, 30, 35);
                             &::placeholder{
-                                color: #162938;
+                                color: rgb(105, 49, 77);
                             }
                         }
                         img{
@@ -149,8 +138,9 @@
                 z-index: 1000;
                 margin-bottom: -40px;
                 margin-top: 40px;
+                color: rgb(105, 49, 77);
                 &:hover{
-                    color: purple;
+                    color: rgb(61, 26, 43);
                     transition: all .5s ease-in-out;
                 }
             }
@@ -193,10 +183,10 @@
                     border-radius: 20px;
                     margin: 10px;
                     transition: all .5s ease-in-out;
-                    background: #052136;
+                    background: rgb(188,101,144);
                     color: #bdbaba;
                     &:hover{
-                        background: #1f3a4e;
+                        background: rgb(209, 117, 148);
                         transition: all .5s ease-in-out;
                         color: #fff;
                     }
@@ -205,23 +195,11 @@
                         position: relative;
                         width: 100%;
                         height: 50px;
-                        border-bottom: 2px solid #162938;
+                        border-bottom: 2px solid rgb(188,101,144);
                         margin: 10px 0;
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-
-                        label{
-                            position: absolute;
-                            top: 50%;
-                            left: 5px;
-                            transform: translateY(-50%);
-                            font-size: 1em;
-                            color: #162938;
-                            font-weight: 500;
-                            pointer-events: none;
-                            transition: all .4s ease-in-out;
-                        }
                         input{
                             width: 100%;
                             height: 100%;
@@ -230,9 +208,9 @@
                             outline: none;
                             font-size: 1em;
                             font-weight: 500;
-                            color: #052136;
+                            color: rgb(41, 30, 35);
                             &::placeholder{
-                                color: #162938;
+                                color: rgb(105, 49, 77);
                             }
                         }
                         img{
