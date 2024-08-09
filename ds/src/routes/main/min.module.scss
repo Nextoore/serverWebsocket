@@ -1,0 +1,97 @@
+.App{
+    .header{
+        height: 100px;
+        width: 100vw;
+        background: #f4e2f8;
+        .logo{
+            left: 0px;
+            margin-left: 30px;
+            margin-top: 10px;
+            width: 80px;
+            height: 80px;
+            overflow: hidden;
+            transition: all .3s ease-in-out;
+            img{
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+            }
+            &:hover{
+                transition: all .3s ease-in-out;
+                scale: 0.9; 
+                border-radius: 50%;
+            }
+        }
+        
+        .middleCont{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            transition: all .2s;
+            
+            .cont{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                height: 100px;
+                width: 220px;
+                transition: all .2s ease-in-out;
+                h1{
+                    color: #241d2c;
+                    font-size: 1.4em;
+                    margin: 0 100px 0 100px;
+                }
+                &:hover{
+                    transform: translateY(3.5px);
+                    transition: all .2s ease-in-out;
+                    h1{
+                        color: #241d2c;
+                        user-select: none;
+                    }
+                }
+            }
+        }
+        .logo{
+            position: absolute;
+            padding: 0;
+            cursor: pointer;
+        }
+        .profile{
+            position: absolute;
+            right: 30px;
+            top: 10px;
+            display: flex;
+            height: 80px;
+            width: 80px;
+            align-items: center;
+            justify-content: space-around;
+            cursor: pointer;
+            .icon{
+                height: 80px;
+                width: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all .3s ease-in-out;
+                img{
+                    height: 80px;
+                    width: 80px;
+                    border-radius: 50%;
+                }
+                &:hover{
+                    scale: 0.9;
+                    transition: all .3s ease-in-out;
+                    border-radius: 50%;
+                }
+            }
+            
+        }
+    }
+    .body{
+        display: grid;
+        width: 100vw;
+        column-gap: 3;
+    }
+}

@@ -111,6 +111,10 @@
                             &::placeholder{
                                 color: rgb(105, 49, 77);
                             }
+                            &:-webkit-autofill, -webkit-autofill:hover, -webkit-autofill:focus{
+                                -webkit-text-fill-color: rgb(105, 49, 77);
+                                -webkit-box-shadow: 0 0 0px 40rem rgb(188,101,144) inset;
+                            }
                         }
                         img{
                             position: absolute;
@@ -137,7 +141,7 @@
             .btn2{
                 z-index: 1000;
                 margin-bottom: -40px;
-                margin-top: 40px;
+                margin-top: 20px;
                 color: rgb(105, 49, 77);
                 &:hover{
                     color: rgb(61, 26, 43);
@@ -211,6 +215,10 @@
                             color: rgb(41, 30, 35);
                             &::placeholder{
                                 color: rgb(105, 49, 77);
+                            }
+                            &:-webkit-autofill, -webkit-autofill:hover, -webkit-autofill:focus{
+                                -webkit-text-fill-color: rgb(105, 49, 77);
+                                -webkit-box-shadow: 0 0 0px 40rem rgb(188,101,144) inset;
                             }
                         }
                         img{
