@@ -2,6 +2,7 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 import { hashString } from "./crypt";
+import { sendVerificationCode } from "./SendEmail"
 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
@@ -10,17 +11,17 @@ function boolBuffer(buffer: Buffer): boolean{
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(Type: string, username: string, password: string, mail: string = '0', date: string = '0', nickname: string = '0'): Promise<boolean> {
+async function sendData(Type: string, email: string, password: string, nickname: string='0'): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
     password = hashString(password);
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
       if (Type == 'register'){
-        const message = `${Type} ${username} ${password} ${nickname} ${date} ${mail}`;
+        const message = `${Type} ${email} ${password} ${nickname}`;
         client.write(message);
       }else{
-        const message = `${Type} ${username} ${password}`;
+        const message = `${Type} ${email} ${password}`;
         client.write(message);
       }
     });
@@ -86,37 +87,40 @@ function validatePassword(password: unknown) {
   }
 }
 
+function validateEmail(email: string) {
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    return `Email is not valid`;
+  }
+}
+
 
 export async function postToServer(formData: FormData){
-  const username = String(formData.get("username"))
+  const email = String(formData.get("email"))
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
+  const nickname = String(formData.get("username"));
 
-  let error = validateUsername(username) || validatePassword(password);
+  const code = await sendVerificationCode(email);
+
+  let error = validateEmail(email) || validatePassword(password);
   if (error) return new Error(error);
 
   try{
     if (loginType == 'register'){
-      const nickname = String(formData.get("nickname"))
-      const mail = String(formData.get("mail"));
-      const day = String(formData.get("day"));
-      const month = String(formData.get("month"));
-      const year = String(formData.get("year"));
-      const date = `${day}.${month}.${year}`;
-      console.log(`${nickname}, ${mail}, ${date}`);
-
-      const result = await sendData(loginType, username, password, mail, date, nickname);
+      error = validateUsername(nickname);
+      if (error) return new Error(error)
+      const result = await sendData(loginType, email, password, nickname);
 
       if (result){
-        throw redirect(`/MainPage/main?username=${encodeURIComponent(username)}`);
+        throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
       }
 
     }else{
 
-      const result = await sendData(loginType, username, password);
+      const result = await sendData(loginType, email, password);
 
       if (result){
-        throw redirect(`/MainPage/main?username=${encodeURIComponent(username)}`);
+        throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
       }
     }
     
