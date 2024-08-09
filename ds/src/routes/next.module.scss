@@ -88,6 +88,10 @@
                         &::placeholder{
                             color: #ffbb00;
                         }
+                        &:-webkit-autofill, -webkit-autofill:hover, -webkit-autofill:focus{
+                            -webkit-text-fill-color: rgb(105, 49, 77);
+                            -webkit-box-shadow: 0 0 0px 40rem rgb(188,101,144) inset;
+                        }
                     }
                 }
             
