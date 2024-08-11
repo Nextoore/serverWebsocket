@@ -18,10 +18,10 @@ async function sendData(Type: string, email: string, password: string, nickname:
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
       if (Type == 'register'){
-        const message = `${Type} ${email} ${password} ${nickname}`;
+        const message = `${Type} ${nickname} ${password} ${email}`;
         client.write(message);
       }else{
-        const message = `${Type} ${email} ${password}`;
+        const message = `${Type} ${nickname} ${password}`;
         client.write(message);
       }
     });
@@ -95,7 +95,7 @@ function validateEmail(email: string) {
 
 
 export async function postToServer(formData: FormData){
-  const email = String(formData.get("email"))
+  const email = String(formData.get("mail"))
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
   const nickname = String(formData.get("username"));
