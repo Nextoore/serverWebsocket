@@ -18,10 +18,10 @@ async function sendData(Type: string, email: string, password: string, nickname:
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
       if (Type == 'register'){
-        const message = `${Type} ${nickname} ${password} ${email}`;
+        const message = `${Type} ${email} ${password} ${nickname}`;
         client.write(message);
       }else{
-        const message = `${Type} ${nickname} ${password}`;
+        const message = `${Type} ${email} ${password}`;
         client.write(message);
       }
     });
