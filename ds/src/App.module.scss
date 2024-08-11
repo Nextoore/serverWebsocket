@@ -111,10 +111,10 @@
                             &::placeholder{
                                 color: rgb(105, 49, 77);
                             }
-                            &:-webkit-autofill, -webkit-autofill:hover, -webkit-autofill:focus{
-                                -webkit-text-fill-color: rgb(105, 49, 77);
-                                -webkit-box-shadow: 0 0 0px 40rem rgb(188,101,144) inset;
-                            }
+                            &:-webkit-autofill{
+                                transition: background-color 500000s ease-in-out 0s;
+                                
+                             }
                         }
                         img{
                             position: absolute;
@@ -216,9 +216,9 @@
                             &::placeholder{
                                 color: rgb(105, 49, 77);
                             }
-                            &:-webkit-autofill, -webkit-autofill:hover, -webkit-autofill:focus{
-                                -webkit-text-fill-color: rgb(105, 49, 77);
-                                -webkit-box-shadow: 0 0 0px 40rem rgb(188,101,144) inset;
+                            &:-webkit-autofill{
+                                transition: background-color 500000s ease-in-out 0s;
+                                
                             }
                         }
                         img{

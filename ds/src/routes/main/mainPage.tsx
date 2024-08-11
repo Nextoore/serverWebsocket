@@ -7,18 +7,17 @@ export default function Login() {
       <header class = {styles.header}>
         <div class = {styles.logo}> <a href="/home"><img src={next} alt='' /></a></div>
         <div class = {styles.middleCont}>
-          <div class = {styles.cont}> <h1>Друзья</h1> </div>
-          <div class = {styles.cont}> <h1>Чаты</h1> </div>
-          <div class = {styles.cont}><h1>Каналы</h1></div>
+          <div class={styles.cont}>
+            <div class = {styles.icona}> <img src={next} alt="" /></div>
+            <div class={styles.name}>Ne nightcore</div>
+          </div>
         </div>
         <div class = {styles.profile}>
           <div class = {styles.icon}> <img src={next} alt="" /></div>
+          
         </div>
       </header>
       <div class={styles.body}>
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
         <Card></Card>
       </div>
     </div>

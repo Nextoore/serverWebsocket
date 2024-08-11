@@ -60,7 +60,7 @@ export default function Login(props: RouteSectionProps) {
                   <span>
                     <img src={user}/>
                   </span>
-                  <input name="username" placeholder="Username" autocomplete="nickname" />
+                  <input name="mail" placeholder="Login" autocomplete="nickname" />
                 </div>
                 <div class={styles.inputik}>
                   <span>

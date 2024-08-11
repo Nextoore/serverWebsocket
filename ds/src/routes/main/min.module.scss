@@ -33,23 +33,18 @@
             .cont{
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                height: 100px;
-                width: 220px;
-                transition: all .2s ease-in-out;
-                h1{
-                    color: #241d2c;
-                    font-size: 1.4em;
-                    margin: 0 100px 0 100px;
-                }
-                &:hover{
-                    transform: translateY(3.5px);
-                    transition: all .2s ease-in-out;
-                    h1{
-                        color: #241d2c;
-                        user-select: none;
+                height: 60px;
+                width: 400px;
+                background: #f2cbfa;
+                .icona{
+                    img{
+                        height: 40px;
+                        width: 40px;
+                        border-radius: 50%;
                     }
+                }
+                .name{
+                    margin-left: 20px;
                 }
             }
         }

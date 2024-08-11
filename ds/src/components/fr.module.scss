@@ -1,6 +1,7 @@
 .container{
     display: flex;
     flex-direction: column;
+    align-items: center;
     overflow: hidden;
     height: 180px;
     width: 320px;
@@ -20,21 +21,24 @@
     }
     .infoBox{
         height: 70px;
+        width: 300px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
+        border: 2px solid grey;
+        border-radius: 20px;
+        margin-top: 20px;
+        backdrop-filter: blur(3px);
         img{
             height: 70px;
             width: 70px;
             border-radius: 50%;
             margin-left: 25px;
-            margin-top: 25px;
             border: 2px solid grey;
         }
         p{
-            margin-top: 60px;
-            margin-left: 40px;
+            margin-left: 20px;
             font-size: 1.5em;
             color: #000;
         }
@@ -44,7 +48,6 @@
         align-items: center;
         justify-content: center;
         margin-top: 110px;
-        margin-left: 60px;
         position: absolute;
         .box2{
             display: flex;
