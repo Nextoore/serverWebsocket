@@ -95,7 +95,7 @@ function validateEmail(email: string) {
 
 
 export async function postToServer(formData: FormData){
-  const email = String(formData.get("email"))
+  const email = String(formData.get("mail"))
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
   const nickname = String(formData.get("username"));
