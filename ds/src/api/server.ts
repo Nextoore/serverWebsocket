@@ -2,7 +2,6 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 import { hashString } from "./crypt";
-import { sendVerificationCode } from "./SendEmail";
 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
@@ -11,8 +10,8 @@ function boolBuffer(buffer: Buffer): boolean {
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(type: string, email: string, password: string, nickname: string = '0'): Promise<boolean | string> {
-  return new Promise<boolean | string>((resolve, reject) => {
+async function sendData(type: string, email: string, password: string, nickname: string = '0'): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
     password = hashString(password);
 
@@ -32,19 +31,38 @@ async function sendData(type: string, email: string, password: string, nickname:
 
       client.destroy();
 
-      if (response) {
-        if (type === 'get') {
-          client.on('data', (data: Buffer) => {
-            const username = data.toString();
-            resolve(username);
-          });
-        } else {
-          resolve(true);
-        }
-      } else {
+      if (!response) {
         console.log('Negative response from the server');
         resolve(false);
+      } else {
+        console.log('Negative response from the server');
+        resolve(true);
       }
+    });
+
+    client.on('error', (err) => {
+      console.error(`Error: ${err.message}`);
+      client.destroy();
+      reject(err);
+    });
+
+    client.on('close', () => {
+      console.log('Connection closed');
+    });
+  });
+}
+
+async function getData(message: string) {
+  return new Promise<string>((resolve, reject) => {
+    const client = new net.Socket();
+
+    client.connect(SERVER_PORT, SERVER_IP, () => {
+      client.write(`get ${message}`);
+    });
+
+    client.on('data', (data: string) => {
+      const response = data.toString();
+      resolve(response);
     });
 
     client.on('error', (err) => {
@@ -105,8 +123,6 @@ export async function postToServer(formData: FormData) {
   const loginType = String(formData.get("loginType"));
   const nickname = String(formData.get("username"));
 
-  const code = await sendVerificationCode(email);
-
 
   let error = validateEmail(email) || validatePassword(password);
   if (error) return new Error(error);
@@ -124,7 +140,7 @@ export async function postToServer(formData: FormData) {
     } else {
       const result = await sendData(loginType, email, password);
       if (result === true) {
-        const user = await sendData("get", email, password) as string;
+        const user = await getData(`${email} ${password}`);
         if (user) {
           throw redirect(`/MainPage/main?username=${encodeURIComponent(user)}`);
         }
