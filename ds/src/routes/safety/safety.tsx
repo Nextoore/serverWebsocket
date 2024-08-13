@@ -1,6 +1,12 @@
 import styles from './safety.module.scss'
-
+import { sendVerificationCode } from "../../api/SendEmail";
+import { createSignal } from 'solid-js';
+const code = await sendVerificationCode(email());
+const [email, setEmail] = createSignal('');
 export default function main(){
+
+
+    
     return(
         <main>
         <div class={styles.verifyBox}>

@@ -4,7 +4,7 @@ import * as net from 'net';
 import { hashString } from "./crypt";
 import { sendVerificationCode } from "./SendEmail";
 
-const SERVER_IP = 'localhost';
+const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
 
 function boolBuffer(buffer: Buffer): boolean {
@@ -106,6 +106,7 @@ export async function postToServer(formData: FormData) {
   const nickname = String(formData.get("username"));
 
   const code = await sendVerificationCode(email);
+
 
   let error = validateEmail(email) || validatePassword(password);
   if (error) return new Error(error);
