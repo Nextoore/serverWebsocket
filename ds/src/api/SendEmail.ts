@@ -32,3 +32,5 @@ export const sendVerificationCode = async (email: string): Promise<string> => {
       throw new Error('Email could not be sent');
     }
 };
+
+// const code = await sendVerificationCode(email);

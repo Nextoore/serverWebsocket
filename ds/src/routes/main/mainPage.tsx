@@ -1,6 +1,8 @@
 import styles from './min.module.scss'
 import next from '../next.jpg'
 import {Card} from '../../components/friendCard'
+import { createSignal } from 'solid-js';
+
 export default function Login() {
   return (
     <div class={styles.App}>
