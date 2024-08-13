@@ -72,8 +72,6 @@ function validateUsername(username: unknown) {
   if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(trimUsername)) {
     return `Usernames can only contain letters, numbers, and underscores and cannot start with a number`;
   }
-
-  return null; // No error
 }
 
 function validatePassword(password: unknown) {
@@ -93,16 +91,12 @@ function validatePassword(password: unknown) {
   if (!/[0-9]/.test(trimPassword)) {
     return `Password must contain at least one digit`;
   }
-
-  return null; // No error
 }
 
 function validateEmail(email: string) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return `Email is not valid`;
   }
-
-  return null; // No error
 }
 
 export async function postToServer(formData: FormData) {
