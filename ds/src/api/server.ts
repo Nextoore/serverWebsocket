@@ -2,28 +2,28 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 import { hashString } from "./crypt";
-import { sendVerificationCode } from "./SendEmail"
+import { sendVerificationCode } from "./SendEmail";
 
-const SERVER_IP = '185.102.139.56';
+const SERVER_IP = 'localhost';
 const SERVER_PORT = 5555;
 
-function boolBuffer(buffer: Buffer): boolean{
+function boolBuffer(buffer: Buffer): boolean {
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(Type: string, email: string, password: string, nickname: string='0'): Promise<boolean> {
-  return new Promise<boolean>((resolve, reject) => {
+async function sendData(type: string, email: string, password: string, nickname: string = '0'): Promise<boolean | string> {
+  return new Promise<boolean | string>((resolve, reject) => {
     const client = new net.Socket();
     password = hashString(password);
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
-      if (Type == 'register'){
-        const message = `${Type} ${email} ${password} ${nickname}`;
-        client.write(message);
-      }else{
-        const message = `${Type} ${email} ${password}`;
-        client.write(message);
+      let message: string;
+      if (type === 'register') {
+        message = `${type} ${email} ${password} ${nickname}`;
+      } else {
+        message = `${type} ${email} ${password}`;
       }
+      client.write(message);
     });
 
     client.on('data', (data: Buffer) => {
@@ -32,18 +32,25 @@ async function sendData(Type: string, email: string, password: string, nickname:
 
       client.destroy();
 
-      if (!response) {
-        console.log('Negative response from the server');
-        resolve(false);  
+      if (response) {
+        if (type === 'get') {
+          client.on('data', (data: Buffer) => {
+            const username = data.toString();
+            resolve(username);
+          });
+        } else {
+          resolve(true);
+        }
       } else {
-        resolve(true);   
+        console.log('Negative response from the server');
+        resolve(false);
       }
     });
 
     client.on('error', (err) => {
       console.error(`Error: ${err.message}`);
       client.destroy();
-      reject(err);  
+      reject(err);
     });
 
     client.on('close', () => {
@@ -58,14 +65,15 @@ function validateUsername(username: unknown) {
   }
 
   const trimUsername = username.trim();
-  if (trimUsername.length < 3 || trimUsername.length > 20){
+  if (trimUsername.length < 3 || trimUsername.length > 20) {
     return `Usernames must be between 3 and 20 characters long`;
   }
 
-  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(trimUsername)){
+  if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(trimUsername)) {
     return `Usernames can only contain letters, numbers, and underscores and cannot start with a number`;
   }
 
+  return null; // No error
 }
 
 function validatePassword(password: unknown) {
@@ -74,28 +82,31 @@ function validatePassword(password: unknown) {
   }
 
   const trimPassword = password.trim();
-  if (trimPassword.length < 6 || trimPassword.length > 20){
+  if (trimPassword.length < 6 || trimPassword.length > 20) {
     return `Passwords must be between 6 and 20 characters long`;
   }
 
-  if (!/[A-Z]/.test(trimPassword)){
-    return`Password must contain at least one uppercase letter`;
+  if (!/[A-Z]/.test(trimPassword)) {
+    return `Password must contain at least one uppercase letter`;
   }
 
-  if (!/[0-9]/.test(trimPassword)){
-    return`Password must contain at least one digit`;
+  if (!/[0-9]/.test(trimPassword)) {
+    return `Password must contain at least one digit`;
   }
+
+  return null; // No error
 }
 
 function validateEmail(email: string) {
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return `Email is not valid`;
   }
+
+  return null; // No error
 }
 
-
-export async function postToServer(formData: FormData){
-  const email = String(formData.get("mail"))
+export async function postToServer(formData: FormData) {
+  const email = String(formData.get("mail"));
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
   const nickname = String(formData.get("username"));
@@ -105,30 +116,26 @@ export async function postToServer(formData: FormData){
   let error = validateEmail(email) || validatePassword(password);
   if (error) return new Error(error);
 
-  try{
-    if (loginType == 'register'){
+  try {
+    if (loginType === 'register') {
       error = validateUsername(nickname);
-      if (error) return new Error(error)
+      if (error) return new Error(error);
+      
       const result = await sendData(loginType, email, password, nickname);
-
-      if (result){
+      if (result === true) {
         throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
       }
 
-    }else{
-
+    } else {
       const result = await sendData(loginType, email, password);
-
-      if (result){
-        throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
+      if (result === true) {
+        const user = await sendData("get", email, password) as string;
+        if (user) {
+          throw redirect(`/MainPage/main?username=${encodeURIComponent(user)}`);
+        }
       }
     }
-    
-  }catch(err){
+  } catch (err) {
     return err as Error;
   }
 }
-
-
-
-
