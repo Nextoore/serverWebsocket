@@ -35,7 +35,6 @@ async function sendData(type: string, email: string, password: string, nickname:
         console.log('Negative response from the server');
         resolve(false);
       } else {
-        console.log('Negative response from the server');
         resolve(true);
       }
     });
@@ -140,7 +139,7 @@ export async function postToServer(formData: FormData) {
     } else {
       const result = await sendData(loginType, email, password);
       if (result === true) {
-        const user = await getData(`${email} ${password}`);
+        const user = await getData(`${email} ${hashString(password)}`);
         if (user) {
           throw redirect(`/MainPage/main?username=${encodeURIComponent(user)}`);
         }
