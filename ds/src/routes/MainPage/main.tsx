@@ -1,10 +1,11 @@
 import { createSignal, createEffect } from "solid-js"; 
 import s from './main.module.scss';
 import { useLocation } from "@solidjs/router";
+import { decryptWithPrivateKey, encryptWithPublicKey} from './../../api/Cryptography/crypt';
 
 let socket: WebSocket | undefined;
 
-const SERVER_IP = '185.102.139.56';
+const SERVER_IP = 'localhost';
 const SERVER_PORT = 9999;
 const SERVER_URL = `ws://${SERVER_IP}:${SERVER_PORT}`;
 
@@ -50,6 +51,11 @@ export default function Home() {
       if (receivedMessage.event === 'history') {
         setMessage([{ chat: receivedMessage.chat, messages: receivedMessage.messages }]);
       } else {
+        const decryptedMessage = decryptWithPrivateKey(receivedMessage.message);
+        const receivedMessageDecrypted = {
+          ...receivedMessage,
+          message: decryptedMessage
+        };
         setMessage((prevArray) => {
           const existingChat = prevArray.find(chat => chat.chat === receivedMessage.chat);
           if (existingChat) {
@@ -74,10 +80,13 @@ export default function Home() {
 
   function sendMessage() { 
     if (socket && socket.readyState === WebSocket.OPEN && chatRoom() !== '') { 
+
+      const encryptedMessage = encryptWithPublicKey(user())
+
       const msg = { 
         user: username(), 
-        message: user(), 
-        id: Date.now(), 
+        message: encryptedMessage,
+        id: Date.now(),
         event: 'message',
         chat: chatRoom() 
       }; 

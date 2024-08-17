@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
-import { hashString } from "./crypt";
+import { hashString } from "./Cryptography/crypt";
 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
