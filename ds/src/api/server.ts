@@ -10,18 +10,15 @@ function boolBuffer(buffer: Buffer): boolean {
   return buffer.readUInt8(0) === 1;
 }
 
-async function sendData(type: string, email: string, password: string, nickname: string = '0'): Promise<boolean> {
+async function sendData(message: string ): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     const client = new net.Socket();
-    password = hashString(password);
+    var serverMessage = message.split(' ')
+    var password = hashString(serverMessage[2])
+    serverMessage[2] = password
+    message = serverMessage.join(' ')
 
     client.connect(SERVER_PORT, SERVER_IP, () => {
-      let message: string;
-      if (type === 'register') {
-        message = `${type} ${email} ${password} ${nickname}`;
-      } else {
-        message = `${type} ${email} ${password}`;
-      }
       client.write(message);
     });
 
@@ -131,13 +128,13 @@ export async function postToServer(formData: FormData) {
       error = validateUsername(nickname);
       if (error) return new Error(error);
       
-      const result = await sendData(loginType, email, password, nickname);
+      const result = await sendData(`${loginType} ${email} ${password} ${nickname}`);
       if (result === true) {
         throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
       }
 
     } else {
-      const result = await sendData(loginType, email, password);
+      const result = await sendData(`${loginType} ${email} ${password}`);
       if (result === true) {
         const user = await getData(`${email} ${hashString(password)}`);
         if (user) {
