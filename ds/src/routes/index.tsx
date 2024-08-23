@@ -11,13 +11,16 @@ import lock from '../icons/lock-alt-solid-24.png'
 import mail from '../icons/envelope-solid-24.png'
 import user from '../icons/user-solid-24.png'
 import { createSignal } from "solid-js";
-import { createEffect } from "solid-js";
+
+
+
+const [maile, setMail] = createSignal("")
+
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(postToServer);
   const [count, setCount] = createSignal(0);
   const [login, setLogin] = createSignal(true);
   // функции 
-
   const handler = () => {
     setCount((prev) => prev + 1)
     console.log(count())   
@@ -129,3 +132,4 @@ export default function Login(props: RouteSectionProps) {
     </main>
   );
 }
+export {maile};

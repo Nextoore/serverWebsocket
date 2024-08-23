@@ -17,7 +17,6 @@ export function Card(){
                         <p>Brawl Stars</p>
                     </div>
                 </div>
-                
                 </div>
         </main>
     )

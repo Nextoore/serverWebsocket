@@ -2,6 +2,9 @@
 import { redirect } from "@solidjs/router";
 import * as net from 'net';
 import { hashString } from "./Cryptography/crypt";
+import { useSession } from "vinxi/http";
+
+
 
 const SERVER_IP = '185.102.139.56';
 const SERVER_PORT = 5555;
@@ -113,13 +116,15 @@ function validateEmail(email: string) {
   }
 }
 
+
+
 export async function postToServer(formData: FormData) {
   const email = String(formData.get("mail"));
   const password = String(formData.get("password"));
   const loginType = String(formData.get("loginType"));
   const nickname = String(formData.get("username"));
 
-
+  
   let error = validateEmail(email) || validatePassword(password);
   if (error) return new Error(error);
 
@@ -130,7 +135,7 @@ export async function postToServer(formData: FormData) {
       
       const result = await sendData(`${loginType} ${email} ${password} ${nickname}`);
       if (result === true) {
-        throw redirect(`/MainPage/main?username=${encodeURIComponent(nickname)}`);
+        throw redirect(`/ew/`);
       }
 
     } else {
